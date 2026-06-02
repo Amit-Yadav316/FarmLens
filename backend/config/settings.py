@@ -1,5 +1,5 @@
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
 
 
@@ -37,9 +37,12 @@ class Settings(BaseSettings):
     # Default language
     default_lang: str = Field(default="hi", validation_alias="DEFAULT_LANG")
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    huggingface_hub_token: str = Field(default="", validation_alias="HUGGINGFACE_HUB_TOKEN")
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8"
+    )
 
 
 @lru_cache()
