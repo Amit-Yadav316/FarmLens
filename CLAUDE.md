@@ -21,6 +21,22 @@ Core principle: Never hallucinate — real data from APIs, real documents from I
 - Never create or modify requirements.txt
 - Run `uv sync` to install, never `pip install`
 
+## Package Version Rules
+
+Never pin langchain ecosystem packages individually:
+- langchain
+- langchain-community
+- langchain-core
+- langchain-ollama
+- langchain-text-splitters
+
+Always install them together unpinned.
+Let uv resolve compatible versions automatically.
+Only pin packages with breaking version differences:
+- fastapi
+- pydantic
+- pydantic-settings
+
 ### Python Version
 - Python 3.11 only
 - Use `from __future__ import annotations` in every file
