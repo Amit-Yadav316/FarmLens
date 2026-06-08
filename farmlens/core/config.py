@@ -17,6 +17,7 @@ class Settings(BaseSettings):
 
     # External API keys
     data_gov_api_key: str = ""
+    mandi_resource_id: str = "9ef84268-d588-465a-a308-a864a43d0070"
     openweather_api_key: str = ""
     hf_token: str = ""
 
