@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "farmlens"
+version = "0.1.0"
+description = "Multilingual voice-first AI advisory system for Indian farmers"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    # API
+    "fastapi>=0.115,<0.116",
+    "uvicorn[standard]>=0.30",
+    "python-multipart>=0.0.9",
+    # Pydantic (pinned — breaking changes between majors)
+    "pydantic>=2.10,<3",
+    "pydantic-settings>=2.7,<3",
+    # HTTP
+    "httpx>=0.27",
+    "requests>=2.32",
+    # Caching
+    "cachetools>=5.3",
+    # Langchain ecosystem (unpinned — let uv resolve)
+    "langchain",
+    "langchain-community",
+    "langchain-core",
+    "langchain-ollama",
+    "langchain-text-splitters",
+    # RAG / Vector store
+    "chromadb>=0.5",
+    "sentence-transformers>=3.0",
+    # ASR
+    "faster-whisper>=1.0",
+    # Frontend
+    "streamlit>=1.40",
+    "gradio>=5.0",
+    # PDF processing
+    "pypdf>=5.0",
+    # Logging
+    "structlog>=24.0",
+]
+
+[tool.uv]
+link-mode = "copy"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "pytest-mock>=3.14",
+    "httpx>=0.27",
+    "ruff>=0.8",
+    "mypy>=1.13",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["farmlens"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
