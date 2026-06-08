@@ -1,0 +1,13 @@
+﻿Auto-commit: staged local changes
+
+- .gitignore: Updated
+- CLAUDE.md: Updated
+- TASKS.md: Updated
+- .env.example: Added
+- data/: Added
+- farmlens/: Added
+- pyproject.toml: Added
+- tests/: Added
+- uv.lock: Added
+
+Committed via VS Code assistant.
