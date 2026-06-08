@@ -15,3 +15,7 @@ dist/
 .ruff_cache/
 .git_file_list.txt
 .git_file_list_trimmed.txt
+
+.git_file_list.txt
+.git_file_list_trimmed.txt
+.git_commit_msg.txt
