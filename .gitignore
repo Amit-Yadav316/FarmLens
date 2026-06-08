@@ -13,3 +13,5 @@ dist/
 *.egg-info/
 .mypy_cache/
 .ruff_cache/
+.git_file_list.txt
+.git_file_list_trimmed.txt
