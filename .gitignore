@@ -19,3 +19,6 @@ dist/
 .git_file_list.txt
 .git_file_list_trimmed.txt
 .git_commit_msg.txt
+
+# Claude Code — personal settings
+.claude/settings.local.json
