@@ -9,3 +9,7 @@ data/chroma_db/
 models/
 .pytest_cache/
 *.log
+dist/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
