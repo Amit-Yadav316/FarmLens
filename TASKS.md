@@ -1,7 +1,7 @@
-# FarmLens — Task Tracker
+﻿# FarmLens â€” Task Tracker
 
 ## Current Status
-Day 1 of 10 — Project skeleton
+Day 1 of 10 â€” COMPLETE âœ“ | Day 2 next
 
 ---
 
@@ -9,121 +9,121 @@ Day 1 of 10 — Project skeleton
 Create the complete folder structure with empty files.
 Set up pyproject.toml with uv.
 Verify `uv sync` installs everything cleanly.
-NO feature code today — structure only.
+NO feature code today â€” structure only.
 
 ---
 
 ## Day 1 Checklist
 
 ### Environment Setup
-- [ ] Install uv: `pip install uv`
-- [ ] Delete old venv: `Remove-Item -Recurse -Force .venv`
-- [ ] Create new venv: `uv venv --python 3.11`
-- [ ] Activate: `.venv\Scripts\activate`
+- [x] Install uv: `pip install uv`
+- [x] Create new venv: `uv venv --python 3.11`
+- [x] Activate: `.venv\Scripts\activate`
+- NOTE: On OneDrive, always run with `$env:UV_LINK_MODE="copy"` before `uv sync`
 
 ### Files to Create Today
 
 #### Root files
-- [ ] pyproject.toml
-- [ ] .env (copy from .env.example, fill in keys)
-- [ ] .env.example
-- [ ] .gitignore
-- [ ] CLAUDE.md (done)
-- [ ] TASKS.md (this file)
+- [x] pyproject.toml
+- [x] .env (already exists with keys)
+- [x] .env.example
+- [x] .gitignore
+- [x] CLAUDE.md (done)
+- [x] TASKS.md (this file)
 
 #### farmlens/ package
-- [ ] farmlens/__init__.py
-- [ ] farmlens/core/__init__.py
-- [ ] farmlens/core/config.py
-- [ ] farmlens/core/exceptions.py
-- [ ] farmlens/core/dependencies.py
-- [ ] farmlens/core/logging.py
-- [ ] farmlens/features/__init__.py
-- [ ] farmlens/features/asr/__init__.py
-- [ ] farmlens/features/asr/service.py
-- [ ] farmlens/features/asr/schemas.py
-- [ ] farmlens/features/asr/exceptions.py
-- [ ] farmlens/features/mandi/__init__.py
-- [ ] farmlens/features/mandi/service.py
-- [ ] farmlens/features/mandi/schemas.py
-- [ ] farmlens/features/mandi/exceptions.py
-- [ ] farmlens/features/mandi/constants.py
-- [ ] farmlens/features/weather/__init__.py
-- [ ] farmlens/features/weather/service.py
-- [ ] farmlens/features/weather/schemas.py
-- [ ] farmlens/features/weather/exceptions.py
-- [ ] farmlens/features/weather/constants.py
-- [ ] farmlens/features/rag/__init__.py
-- [ ] farmlens/features/rag/pipeline.py
-- [ ] farmlens/features/rag/ingestion.py
-- [ ] farmlens/features/rag/schemas.py
-- [ ] farmlens/features/rag/exceptions.py
-- [ ] farmlens/features/schemes/__init__.py
-- [ ] farmlens/features/schemes/service.py
-- [ ] farmlens/features/schemes/schemas.py
-- [ ] farmlens/features/schemes/data.py
-- [ ] farmlens/features/intent/__init__.py
-- [ ] farmlens/features/intent/router.py
-- [ ] farmlens/features/intent/schemas.py
-- [ ] farmlens/features/intent/constants.py
-- [ ] farmlens/api/__init__.py
-- [ ] farmlens/api/app.py
-- [ ] farmlens/api/middleware.py
-- [ ] farmlens/api/routes/__init__.py
-- [ ] farmlens/api/routes/chat.py
-- [ ] farmlens/api/routes/health.py
-- [ ] farmlens/api/routes/data.py
-- [ ] farmlens/frontend/app.py
-- [ ] farmlens/frontend/gradio_app.py
-- [ ] farmlens/scripts/ingest_pdfs.py
-- [ ] farmlens/scripts/prepare_kcc.py
+- [x] farmlens/__init__.py
+- [x] farmlens/core/__init__.py
+- [x] farmlens/core/config.py
+- [x] farmlens/core/exceptions.py
+- [x] farmlens/core/dependencies.py
+- [x] farmlens/core/logging.py
+- [x] farmlens/features/__init__.py
+- [x] farmlens/features/asr/__init__.py
+- [x] farmlens/features/asr/service.py
+- [x] farmlens/features/asr/schemas.py
+- [x] farmlens/features/asr/exceptions.py
+- [x] farmlens/features/mandi/__init__.py
+- [x] farmlens/features/mandi/service.py
+- [x] farmlens/features/mandi/schemas.py
+- [x] farmlens/features/mandi/exceptions.py
+- [x] farmlens/features/mandi/constants.py
+- [x] farmlens/features/weather/__init__.py
+- [x] farmlens/features/weather/service.py
+- [x] farmlens/features/weather/schemas.py
+- [x] farmlens/features/weather/exceptions.py
+- [x] farmlens/features/weather/constants.py
+- [x] farmlens/features/rag/__init__.py
+- [x] farmlens/features/rag/pipeline.py
+- [x] farmlens/features/rag/ingestion.py
+- [x] farmlens/features/rag/schemas.py
+- [x] farmlens/features/rag/exceptions.py
+- [x] farmlens/features/schemes/__init__.py
+- [x] farmlens/features/schemes/service.py
+- [x] farmlens/features/schemes/schemas.py
+- [x] farmlens/features/schemes/data.py
+- [x] farmlens/features/intent/__init__.py
+- [x] farmlens/features/intent/router.py
+- [x] farmlens/features/intent/schemas.py
+- [x] farmlens/features/intent/constants.py
+- [x] farmlens/api/__init__.py
+- [x] farmlens/api/app.py
+- [x] farmlens/api/middleware.py
+- [x] farmlens/api/routes/__init__.py
+- [x] farmlens/api/routes/chat.py
+- [x] farmlens/api/routes/health.py
+- [x] farmlens/api/routes/data.py
+- [x] farmlens/frontend/app.py
+- [x] farmlens/frontend/gradio_app.py
+- [x] farmlens/scripts/ingest_pdfs.py
+- [x] farmlens/scripts/prepare_kcc.py
 
 #### tests/
-- [ ] tests/__init__.py
-- [ ] tests/conftest.py
-- [ ] tests/unit/__init__.py
-- [ ] tests/unit/test_mandi_service.py
-- [ ] tests/unit/test_weather_service.py
-- [ ] tests/unit/test_rag_pipeline.py
-- [ ] tests/unit/test_intent_router.py
-- [ ] tests/integration/__init__.py
-- [ ] tests/integration/test_api.py
+- [x] tests/__init__.py
+- [x] tests/conftest.py
+- [x] tests/unit/__init__.py
+- [x] tests/unit/test_mandi_service.py
+- [x] tests/unit/test_weather_service.py
+- [x] tests/unit/test_rag_pipeline.py
+- [x] tests/unit/test_intent_router.py
+- [x] tests/integration/__init__.py
+- [x] tests/integration/test_api.py
 
 #### data/
-- [ ] data/pdfs/.gitkeep
-- [ ] data/crop_map.json
-- [ ] data/location_map.json
-- [ ] data/schemes.json
+- [x] data/pdfs/.gitkeep
+- [x] data/crop_map.json
+- [x] data/location_map.json
+- [x] data/schemes.json
 
 ### Verify at end of Day 1
-- [ ] `uv sync` runs without errors
-- [ ] `python -c "import farmlens; print('OK')"` works
-- [ ] `pytest tests/ --collect-only` finds all test files
-- [ ] `git status` does NOT show .env file
+- [x] `uv sync` runs without errors (183 packages resolved, UV_LINK_MODE=copy required for OneDrive)
+- [x] `python -c "import farmlens; print('OK')"` works
+- [x] `pytest tests/ --collect-only` finds all 7 test files
+- [x] `git status` does NOT show .env file
 
 ---
 
 ## Day 2 Plan (tomorrow)
-- farmlens/core/config.py — Settings class
-- farmlens/core/exceptions.py — exception hierarchy
-- farmlens/features/mandi/service.py — MandiService class
-- farmlens/features/mandi/constants.py — crop_map, location_map
+- farmlens/core/config.py â€” Settings class
+- farmlens/core/exceptions.py â€” exception hierarchy
+- farmlens/features/mandi/service.py â€” MandiService class
+- farmlens/features/mandi/constants.py â€” crop_map, location_map
 - tests/unit/test_mandi_service.py
 - Goal: `pytest tests/unit/test_mandi_service.py` all passing
 
 ---
 
 ## Day 3 Plan
-- farmlens/features/weather/service.py — WeatherService class
-- farmlens/features/asr/service.py — ASRService class
+- farmlens/features/weather/service.py â€” WeatherService class
+- farmlens/features/asr/service.py â€” ASRService class
 - Tests for both
 - Goal: mandi + weather + asr all tested
 
 ---
 
 ## Day 4 Plan
-- farmlens/features/rag/pipeline.py — RAGPipeline class
-- farmlens/features/rag/ingestion.py — PDFIngestion class
+- farmlens/features/rag/pipeline.py â€” RAGPipeline class
+- farmlens/features/rag/ingestion.py â€” PDFIngestion class
 - farmlens/scripts/ingest_pdfs.py
 - Download ICAR PDFs
 - Goal: ChromaDB populated, RAG answers working
@@ -131,17 +131,17 @@ NO feature code today — structure only.
 ---
 
 ## Day 5 Plan
-- farmlens/features/intent/router.py — IntentRouter class
-- farmlens/features/schemes/service.py — SchemeService class
-- farmlens/api/app.py — FastAPI app
-- farmlens/api/routes/ — all routes
+- farmlens/features/intent/router.py â€” IntentRouter class
+- farmlens/features/schemes/service.py â€” SchemeService class
+- farmlens/api/app.py â€” FastAPI app
+- farmlens/api/routes/ â€” all routes
 - Goal: Full API running at localhost:8000
 
 ---
 
 ## Day 6 Plan
-- farmlens/frontend/app.py — Streamlit UI
-- End-to-end test: voice → answer
+- farmlens/frontend/app.py â€” Streamlit UI
+- End-to-end test: voice â†’ answer
 - Goal: Working local demo
 
 ---
@@ -155,7 +155,7 @@ NO feature code today — structure only.
 
 ## Day 8 Plan
 - Connect disease detection to pipeline
-- Goal: Photo → Hindi diagnosis
+- Goal: Photo â†’ Hindi diagnosis
 
 ---
 
