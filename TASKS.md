@@ -1,7 +1,7 @@
 ﻿# FarmLens â€” Task Tracker
 
 ## Current Status
-Day 1 of 10 â€” COMPLETE âœ“ | Day 2 next
+Day 1 âœ” | Day 2 âœ” | Day 3 âœ” | Day 4 âœ” | Day 5 next
 
 ---
 
@@ -103,30 +103,30 @@ NO feature code today â€” structure only.
 
 ---
 
-## Day 2 Plan (tomorrow)
-- farmlens/core/config.py â€” Settings class
-- farmlens/core/exceptions.py â€” exception hierarchy
-- farmlens/features/mandi/service.py â€” MandiService class
-- farmlens/features/mandi/constants.py â€” crop_map, location_map
-- tests/unit/test_mandi_service.py
-- Goal: `pytest tests/unit/test_mandi_service.py` all passing
+## Day 2 Plan â€” COMPLETE âœ”
+- [x] farmlens/core/config.py â€” Settings class (+ mandi_resource_id)
+- [x] farmlens/core/exceptions.py â€” exception hierarchy
+- [x] farmlens/features/mandi/service.py â€” MandiService class
+- [x] farmlens/features/mandi/constants.py â€” multilingual CROP_MAP + LOCATION_MAP
+- [x] tests/unit/test_mandi_service.py â€” 10 tests, all passing
 
 ---
 
-## Day 3 Plan
-- farmlens/features/weather/service.py â€” WeatherService class
-- farmlens/features/asr/service.py â€” ASRService class
-- Tests for both
-- Goal: mandi + weather + asr all tested
+## Day 3 Plan â€” COMPLETE âœ”
+- [x] farmlens/features/weather/service.py â€” WeatherService (forecast + spray rules)
+- [x] farmlens/features/asr/service.py â€” ASRService (lazy Whisper, BytesIO input)
+- [x] tests/unit/test_weather_service.py â€” 9 tests passing
+- [x] tests/unit/test_asr_service.py â€” 7 tests passing (created new file)
+- Total: 26 unit tests passing across mandi + weather + asr
 
 ---
 
-## Day 4 Plan
-- farmlens/features/rag/pipeline.py â€” RAGPipeline class
-- farmlens/features/rag/ingestion.py â€” PDFIngestion class
-- farmlens/scripts/ingest_pdfs.py
-- Download ICAR PDFs
-- Goal: ChromaDB populated, RAG answers working
+## Day 4 Plan â€” COMPLETE âœ”
+- [x] farmlens/features/rag/ingestion.py â€” PDFIngestion (PyPDFLoader + RecursiveCharacterTextSplitter + ChromaDB)
+- [x] farmlens/features/rag/pipeline.py â€” RAGPipeline (HuggingFaceEmbeddings + RetrievalQA + OllamaLLM)
+- [x] tests/unit/test_rag_pipeline.py â€” 12 tests passing (RAGPipeline + PDFIngestion)
+- [x] farmlens/scripts/ingest_pdfs.py â€” already wired, calls PDFIngestion.run()
+- NOTE: Place ICAR PDFs in data/pdfs/ and run `uv run python farmlens/scripts/ingest_pdfs.py` to populate ChromaDB
 
 ---
 
