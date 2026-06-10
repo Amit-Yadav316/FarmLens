@@ -39,11 +39,17 @@ def get_scheme_service(
     return SchemeService(settings)
 
 
+_rag_pipeline: RAGPipeline | None = None
+
+
 def get_rag_pipeline(
     settings: Settings = Depends(get_settings),
 ) -> RAGPipeline:
-    """Provide the RAGPipeline instance."""
-    return RAGPipeline(settings)
+    """Provide the shared RAGPipeline singleton (one instance per app)."""
+    global _rag_pipeline
+    if _rag_pipeline is None:
+        _rag_pipeline = RAGPipeline(settings)
+    return _rag_pipeline
 
 
 def get_intent_router(

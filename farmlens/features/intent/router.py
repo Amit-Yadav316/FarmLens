@@ -7,7 +7,6 @@ from farmlens.features.intent.constants import (
     SCHEME_KEYWORDS,
     WEATHER_KEYWORDS,
 )
-from farmlens.features.intent.exceptions import IntentException
 from farmlens.features.intent.schemas import Intent, IntentResult
 
 
@@ -34,4 +33,18 @@ class IntentRouter:
 
     def _detect_intent(self, text: str) -> Intent:
         """Return the best-matching intent for the lowercased text."""
-        raise NotImplementedError
+        scores: dict[Intent, int] = {
+            Intent.PRICE: self._count_matches(text, PRICE_KEYWORDS),
+            Intent.WEATHER: self._count_matches(text, WEATHER_KEYWORDS),
+            Intent.DISEASE: self._count_matches(text, DISEASE_KEYWORDS),
+            Intent.SCHEME: self._count_matches(text, SCHEME_KEYWORDS),
+        }
+        best_intent = max(scores, key=lambda intent: scores[intent])
+        if scores[best_intent] == 0:
+            return Intent.GENERAL
+        return best_intent
+
+    @staticmethod
+    def _count_matches(text: str, keywords: list[str]) -> int:
+        """Count how many keywords appear in the text."""
+        return sum(1 for keyword in keywords if keyword.lower() in text)

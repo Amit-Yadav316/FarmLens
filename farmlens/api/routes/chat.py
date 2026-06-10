@@ -11,6 +11,12 @@ from farmlens.features.rag.schemas import RAGResponse
 router = APIRouter()
 
 
+def _ensure_ready(pipeline: RAGPipeline) -> None:
+    """Initialize the RAG pipeline on first use."""
+    if not pipeline.is_ready:
+        pipeline.initialize()
+
+
 @router.post("/chat", response_model=RAGResponse)
 async def chat(
     question: str,
@@ -18,8 +24,10 @@ async def chat(
     pipeline: RAGPipeline = Depends(get_rag_pipeline),
     intent_router: IntentRouter = Depends(get_intent_router),
 ) -> RAGResponse:
-    """Answer a text farming question."""
-    raise NotImplementedError
+    """Classify a text farming question and answer it via RAG."""
+    intent_router.classify(question)
+    _ensure_ready(pipeline)
+    return pipeline.answer(question, language)
 
 
 @router.post("/voice-chat", response_model=RAGResponse)
@@ -30,5 +38,9 @@ async def voice_chat(
     pipeline: RAGPipeline = Depends(get_rag_pipeline),
     intent_router: IntentRouter = Depends(get_intent_router),
 ) -> RAGResponse:
-    """Transcribe audio and answer the farming question."""
-    raise NotImplementedError
+    """Transcribe audio, classify the question, and answer it via RAG."""
+    audio_bytes = await audio.read()
+    transcript = asr.transcribe(audio_bytes, language)
+    intent_router.classify(transcript.text)
+    _ensure_ready(pipeline)
+    return pipeline.answer(transcript.text, language)

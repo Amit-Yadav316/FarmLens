@@ -2,9 +2,15 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 
-from farmlens.core.dependencies import get_mandi_service, get_weather_service
+from farmlens.core.dependencies import (
+    get_mandi_service,
+    get_scheme_service,
+    get_weather_service,
+)
 from farmlens.features.mandi.schemas import PriceResponse
 from farmlens.features.mandi.service import MandiService
+from farmlens.features.schemes.schemas import SchemeResponse
+from farmlens.features.schemes.service import SchemeService
 from farmlens.features.weather.schemas import WeatherResponse
 from farmlens.features.weather.service import WeatherService
 
@@ -29,3 +35,12 @@ async def get_weather(
 ) -> WeatherResponse:
     """Return weather forecast and spray advisory for coordinates."""
     return service.get_advisory(lat, lon)
+
+
+@router.get("/schemes", response_model=SchemeResponse)
+async def get_schemes(
+    query: str,
+    service: SchemeService = Depends(get_scheme_service),
+) -> SchemeResponse:
+    """Return government schemes relevant to the query."""
+    return service.find_schemes(query)
