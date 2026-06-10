@@ -53,12 +53,14 @@ class RAGPipeline:
 
     def _load_embedder(self) -> Any:
         """Load the multilingual HuggingFace embedding model."""
-        from langchain_community.embeddings import HuggingFaceEmbeddings
+        from langchain_huggingface import HuggingFaceEmbeddings
+
         return HuggingFaceEmbeddings(model_name=_EMBED_MODEL)
 
     def _load_db(self) -> Any:
         """Connect to the persisted ChromaDB vector store."""
-        from langchain_community.vectorstores import Chroma
+        from langchain_chroma import Chroma
+
         return Chroma(
             persist_directory=self._settings.chroma_db_path,
             embedding_function=self._embedder,
@@ -66,15 +68,21 @@ class RAGPipeline:
 
     def _build_chain(self) -> Any:
         """Build a RetrievalQA chain backed by Ollama and ChromaDB."""
-        from langchain.chains import RetrievalQA
+        try:  # langchain >= 1.0 moved legacy chains into langchain_classic
+            from langchain_classic.chains import RetrievalQA
+        except ImportError:  # langchain < 1.0
+            from langchain.chains import RetrievalQA
         from langchain_ollama import OllamaLLM
+
         llm = OllamaLLM(
             base_url=self._settings.ollama_base_url,
             model=self._settings.ollama_model,
         )
         retriever = self._db.as_retriever(search_kwargs={"k": 3})
         return RetrievalQA.from_chain_type(
-            llm=llm, retriever=retriever, return_source_documents=True,
+            llm=llm,
+            retriever=retriever,
+            return_source_documents=True,
         )
 
     def _build_response(self, result: dict, language: str) -> RAGResponse:

@@ -40,6 +40,7 @@ class PDFIngestion:
         """Load and split a single PDF into Document chunks."""
         from langchain_community.document_loaders import PyPDFLoader
         from langchain_text_splitters import RecursiveCharacterTextSplitter
+
         loader = PyPDFLoader(path)
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=self._chunk_size,
@@ -49,7 +50,8 @@ class PDFIngestion:
 
     def _embed_and_store(self, chunks: list[Document], embedder: Embeddings) -> int:
         """Embed chunks and persist them to ChromaDB. Returns chunk count."""
-        from langchain_community.vectorstores import Chroma
+        from langchain_chroma import Chroma
+
         db = Chroma(
             persist_directory=self._settings.chroma_db_path,
             embedding_function=embedder,
@@ -59,5 +61,6 @@ class PDFIngestion:
 
     def _get_embedder(self) -> Any:
         """Load the multilingual sentence embedding model."""
-        from langchain_community.embeddings import HuggingFaceEmbeddings
+        from langchain_huggingface import HuggingFaceEmbeddings
+
         return HuggingFaceEmbeddings(model_name=_EMBED_MODEL)

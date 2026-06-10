@@ -9,7 +9,9 @@ from farmlens.features.rag.ingestion import PDFIngestion
 from farmlens.features.rag.pipeline import RAGPipeline
 
 
-def _make_source_doc(content: str = "test chunk", source: str = "icar.pdf", page: int = 1) -> MagicMock:
+def _make_source_doc(
+    content: str = "test chunk", source: str = "icar.pdf", page: int = 1
+) -> MagicMock:
     doc = MagicMock()
     doc.page_content = content
     doc.metadata = {"source": source, "page": page}
@@ -17,6 +19,7 @@ def _make_source_doc(content: str = "test chunk", source: str = "icar.pdf", page
 
 
 # ─── RAGPipeline tests ────────────────────────────────────────────────────────
+
 
 class TestRAGPipeline:
     """Tests for RAGPipeline."""
@@ -104,6 +107,7 @@ class TestRAGPipeline:
 
 
 # ─── PDFIngestion tests ───────────────────────────────────────────────────────
+
 
 class TestPDFIngestion:
     """Tests for PDFIngestion."""
