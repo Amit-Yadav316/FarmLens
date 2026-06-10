@@ -6,7 +6,11 @@ __pycache__/
 *.bin
 *.safetensors
 data/chroma_db/
+/chroma_db/
 models/
+
+# ICAR PDF corpus — large binaries, ingested locally (keep dir via .gitkeep)
+data/pdfs/*.pdf
 .pytest_cache/
 *.log
 dist/

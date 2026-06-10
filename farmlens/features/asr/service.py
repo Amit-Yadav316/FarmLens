@@ -31,6 +31,7 @@ class ASRService:
             return
         try:
             from faster_whisper import WhisperModel
+
             self._model = WhisperModel(self._model_size, device="cpu", compute_type="int8")
         except Exception as e:
             raise ASRException(f"Failed to load Whisper model: {e}") from e

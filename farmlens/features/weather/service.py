@@ -38,7 +38,8 @@ class WeatherService:
     def _fetch_forecast(self, lat: float, lon: float) -> dict:
         """Fetch raw 5-day forecast from OpenWeatherMap."""
         params = {
-            "lat": lat, "lon": lon,
+            "lat": lat,
+            "lon": lon,
             "appid": self._api_key,
             "units": "metric",
             "cnt": 40,
@@ -59,7 +60,12 @@ class WeatherService:
         city = raw.get("city", {}).get("name", "Unknown")
         forecast = self._parse_days(raw.get("list", []))
         safe, advisory = self._spray_decision(forecast)
-        return WeatherResponse(location=city, forecast=forecast, spray_advisory=advisory, safe_to_spray=safe)
+        return WeatherResponse(
+            location=city,
+            forecast=forecast,
+            spray_advisory=advisory,
+            safe_to_spray=safe,
+        )
 
     def _parse_days(self, items: list[dict]) -> list[ForecastDay]:
         """Group 3-hourly slots by date and aggregate into daily forecasts."""
@@ -76,9 +82,13 @@ class WeatherService:
         rains = [s.get("rain", {}).get("3h", 0.0) for s in slots]
         mid = slots[len(slots) // 2]
         return ForecastDay(
-            date=date, temp_min=min(temps), temp_max=max(temps),
-            humidity=max(humids), wind_speed=max(winds),
-            rain_mm=sum(rains), condition=mid["weather"][0]["description"],
+            date=date,
+            temp_min=min(temps),
+            temp_max=max(temps),
+            humidity=max(humids),
+            wind_speed=max(winds),
+            rain_mm=sum(rains),
+            condition=mid["weather"][0]["description"],
         )
 
     def _spray_decision(self, forecast: list[ForecastDay]) -> tuple[bool, str]:
