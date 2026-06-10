@@ -1,7 +1,7 @@
 ﻿# FarmLens â€” Task Tracker
 
 ## Current Status
-Day 1 âœ” | Day 2 âœ” | Day 3 âœ” | Day 4 âœ” | Day 5 next
+Day 1 âœ” | Day 2 âœ” | Day 3 âœ” | Day 4 âœ” | Day 5 âœ” | Day 6 âœ” | Day 7 next
 
 ---
 
@@ -130,19 +130,32 @@ NO feature code today â€” structure only.
 
 ---
 
-## Day 5 Plan
-- farmlens/features/intent/router.py â€” IntentRouter class
-- farmlens/features/schemes/service.py â€” SchemeService class
-- farmlens/api/app.py â€” FastAPI app
-- farmlens/api/routes/ â€” all routes
-- Goal: Full API running at localhost:8000
+## Day 5 Plan â€” COMPLETE âœ”
+- [x] farmlens/features/intent/router.py â€” IntentRouter (keyword scoring, multilingual)
+- [x] farmlens/features/schemes/service.py â€” SchemeService (token relevance ranking)
+- [x] farmlens/api/routes/chat.py â€” /chat + /voice-chat (intent classify -> RAG)
+- [x] farmlens/api/routes/data.py â€” added /schemes endpoint
+- [x] core/dependencies.py â€” RAGPipeline now a shared singleton
+- [x] tests/unit/test_intent_router.py â€” 9 tests
+- [x] tests/unit/test_scheme_service.py â€” 8 tests (new file)
+- [x] tests/integration/test_api.py â€” added /schemes endpoint tests
+- Routes live: /health, /status, /api/v1/{price,weather,schemes,chat,voice-chat}
+- Total: 60 tests passing
+- NOTE: /chat + /voice-chat need Ollama running + ChromaDB ingested to answer
 
 ---
 
-## Day 6 Plan
-- farmlens/frontend/app.py â€” Streamlit UI
-- End-to-end test: voice â†’ answer
-- Goal: Working local demo
+## Day 6 Plan â€” COMPLETE âœ”
+- [x] farmlens/frontend/app.py â€” Streamlit UI (HTTP client to FastAPI backend)
+  - Text tab -> /chat, Voice tab (st.audio_input) -> /voice-chat
+  - Tools tab -> /price, /weather, /schemes (work without Ollama)
+  - Language selector (6 langs), sidebar backend health indicator
+  - Graceful error handling so the UI never crashes if backend/Ollama is down
+- RUN: start backend `uv run uvicorn farmlens.api.app:app --reload`,
+  then `uv run streamlit run farmlens/frontend/app.py`
+- NOTE: full voice->answer needs backend + Ollama running + ChromaDB ingested;
+  the /price /weather /schemes tools work standalone for the demo
+- Goal: Working local demo âœ”
 
 ---
 
@@ -160,9 +173,11 @@ NO feature code today â€” structure only.
 ---
 
 ## Day 9 Plan
-- Kaggle: Fine-tune Mistral on KCC dataset
-- Load LoRA adapter
-- Goal: Better Hindi farming responses
+- Kaggle: Fine-tune Indic base model on KCC dataset (Unsloth + QLoRA)
+  - Base: Airavata (Hindi-first MVP); revisit Llama 3.1 8B / Sarvam-1 for full multilingual
+  - NOTE: Train on Kaggle GPU,
+    convert LoRA -> merged GGUF (llama.cpp), import into Ollama via Modelfile.
+- Goal: Natural Hindi farming TONE (facts still come from RAG, not the weights)
 
 ---
 
@@ -172,6 +187,36 @@ NO feature code today â€” structure only.
 - README with architecture diagram
 - Demo video
 - Goal: Public URL live
+
+---
+
+## Model Strategy (decided, ref for Phase 2)
+
+LLM base model
+- MVP: Airavata (Llama2-7B, Hindi-instruction-tuned) — Hindi-first.
+  Strong Hindi; weak on Punjabi/Marathi/Telugu/Tamil.
+- Phase 2 (full 6 languages): re-evaluate Llama 3.1 8B (newer, multilingual)
+  or Sarvam-1 (2B, 10 Indic langs, lightweight).
+- Mistral 7B (original pick) = weak Hindi base; superseded.
+
+Division of labour (never hallucinate)
+- RAG (ICAR docs) -> real FACTS at query time.
+- Fine-tune (KCC, LoRA) -> LANGUAGE/TONE only, not facts.
+
+Voice path
+- Whisper (ASRService) does voice->text for all 6 languages.
+- One LLM serves BOTH /chat and /voice-chat. TTS (text->voice out) = future,
+  AI4Bharat Indic TTS if spoken replies are wanted.
+
+Fine-tuning stack
+- Train: Unsloth (2x faster, low VRAM) + QLoRA on Kaggle free GPU.
+- Convert: llama.cpp -> GGUF. Serve: Ollama Modelfile.
+
+Claude API (optional, Phase 2 only)
+- Pro subscription does NOT grant API access; API is billed separately
+  (console.anthropic.com, pay-per-token). Claude can't be fine-tuned.
+- Possible use: cheap Haiku for the agent "which-tool-to-call" routing layer,
+  while Ollama keeps doing local generation. Hybrid, offline-first core stays.
 
 ---
 
