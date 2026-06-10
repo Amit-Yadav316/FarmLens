@@ -9,6 +9,7 @@ from farmlens.features.mandi.exceptions import MandiException
 from farmlens.features.mandi.schemas import PriceRecord, PriceResponse
 
 _AGMARKNET_URL = "https://api.data.gov.in/resource/{resource_id}"
+_REQUEST_TIMEOUT = 30  # Agmarknet (data.gov.in) is slow; allow generous headroom
 
 
 class MandiService:
@@ -56,7 +57,7 @@ class MandiService:
             "limit": 10,
         }
         try:
-            resp = requests.get(url, params=params, timeout=10)
+            resp = requests.get(url, params=params, timeout=_REQUEST_TIMEOUT)
             resp.raise_for_status()
             return resp.json().get("records", [])
         except requests.Timeout as e:
