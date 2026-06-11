@@ -220,6 +220,47 @@ Claude API (optional, Phase 2 only)
 
 ---
 
+## RAG Chunking Strategy (Phase 2, decided)
+
+Problem: ICAR PDFs mix section HEADINGS + prose + TABLES (fertilizer doses,
+spacing, sowing time, varieties). Current ingest (PyPDFLoader +
+RecursiveCharacterTextSplitter 500/50 + paraphrase-multilingual-MiniLM-L12-v2)
+flattens tables and splits them mid-row, and the embedder's ~128-token cap
+silently truncates longer chunks. Tables = the hardest, highest-value content.
+
+Decided stack (priority order, do top-down):
+1. Embedder swap -> bge-m3 (or intfloat/multilingual-e5-base): long context (512+),
+   stronger Hindi. Biggest win / smallest effort. One line in ingestion.py +
+   pipeline.py, then re-ingest.
+2. Layout-aware parse (Docling or unstructured partition_pdf hi_res) -> typed
+   elements: Title | Prose | Table. Lighter on Windows: pdfplumber/camelot for
+   tables + PyPDF for prose.
+3. Metadata on every chunk: crop, season, state, source, page, section_heading,
+   type=table/prose. Enables filtered retrieval (e.g. crop=wheat AND season=rabi)
+   BEFORE vector search.
+4. Parent-child (small-to-big): embed SMALL children for precise search, return
+   the BIG parent (whole section/table) to the LLM. Also solves embedder
+   truncation. Use LangChain ParentDocumentRetriever.
+5. Tables -> LLM chunking (one-time, tables only): convert "120 60 40" ->
+   "Wheat, Rabi: apply N 120, P 60, K 40 kg/ha" propositions as children; keep
+   the full markdown table as the parent. Bounded cost (tables only, ingest-time).
+6. Late chunking: nearly free once on bge-m3 (single embed pass gives each chunk
+   document-level context). Helps the "chunk lacks the word wheat" problem.
+
+Deferred / skip:
+- Agentic chunking: highest quality but costly + non-deterministic. Revisit ONLY
+  if RAGAS eval shows parent-child + table-LLM is insufficient.
+- Semantic chunking alone: helps prose, does nothing for tables. Not worth it
+  standalone for these docs.
+
+Time-boxed minimum: bge-m3 + metadata + parent-child already beats the current
+pipeline substantially; add the table-LLM pass next; agentic last (if ever).
+Validate every change with RAGAS (faithfulness, context precision/recall).
+
+Files in scope: farmlens/features/rag/ingestion.py, farmlens/features/rag/pipeline.py.
+
+---
+
 ## Completed Days
 (move items here as you finish them)
 
