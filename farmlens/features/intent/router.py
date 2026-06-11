@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from farmlens.core.config import Settings
 from farmlens.features.intent.constants import (
     DISEASE_KEYWORDS,
     PRICE_KEYWORDS,
@@ -12,9 +11,6 @@ from farmlens.features.intent.schemas import Intent, IntentResult
 
 class IntentRouter:
     """Routes user queries to the correct feature handler via keyword matching."""
-
-    def __init__(self, settings: Settings) -> None:
-        self._settings = settings
 
     def classify(self, text: str) -> IntentResult:
         """Classify user text into an Intent."""

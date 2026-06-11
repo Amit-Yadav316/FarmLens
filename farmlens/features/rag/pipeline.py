@@ -25,7 +25,7 @@ class RAGPipeline:
             self._embedder = self._load_embedder()
             self._db = self._load_db()
             self._chain = self._build_chain()
-        except Exception as e:
+        except (ImportError, OSError, ValueError, RuntimeError) as e:
             raise RAGException(f"RAG initialization failed: {e}") from e
 
     def answer(self, question: str, language: str = "hi") -> RAGResponse:
@@ -35,7 +35,7 @@ class RAGPipeline:
         try:
             result = self._chain.invoke({"query": question})
             return self._build_response(result, language)
-        except Exception as e:
+        except (RuntimeError, ValueError, ConnectionError, OSError) as e:
             raise RAGException(f"RAG answer failed: {e}") from e
 
     def ingest(self, pdf_dir: str) -> int:
@@ -71,7 +71,7 @@ class RAGPipeline:
         try:  # langchain >= 1.0 moved legacy chains into langchain_classic
             from langchain_classic.chains import RetrievalQA
         except ImportError:  # langchain < 1.0
-            from langchain.chains import RetrievalQA
+            from langchain.chains import RetrievalQA  # type: ignore[no-redef,import-not-found]
         from langchain_ollama import OllamaLLM
 
         llm = OllamaLLM(

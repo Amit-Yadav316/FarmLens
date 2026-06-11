@@ -20,9 +20,11 @@ _STATUS_MAP: dict[type[FarmLensException], int] = {
 }
 
 
-def _handle_farmlens_exception(request: Request, exc: FarmLensException) -> JSONResponse:
+def _handle_farmlens_exception(request: Request, exc: Exception) -> JSONResponse:
     """Convert a FarmLens domain exception into a clean JSON error response."""
-    status_code = _STATUS_MAP.get(type(exc), 500)
+    status_code = 500
+    if isinstance(exc, FarmLensException):
+        status_code = _STATUS_MAP.get(type(exc), 500)
     return JSONResponse(
         status_code=status_code,
         content={"detail": str(exc), "error": type(exc).__name__},

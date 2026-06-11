@@ -136,8 +136,7 @@ farmlens/
 │   └── gradio_app.py      # Gradio UI for HuggingFace deploy
 │
 └── scripts/
-    ├── ingest_pdfs.py     # One-time PDF ingestion
-    └── prepare_kcc.py     # KCC dataset preparation (Phase 2)
+    └── ingest_pdfs.py     # One-time PDF ingestion
 
 tests/
 ├── conftest.py            # Shared fixtures

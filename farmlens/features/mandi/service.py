@@ -49,7 +49,7 @@ class MandiService:
     def _fetch_from_api(self, crop_en: str, state: str) -> list[dict]:
         """Fetch raw price records from the Agmarknet API."""
         url = _AGMARKNET_URL.format(resource_id=self._resource_id)
-        params = {
+        params: dict[str, str | int] = {
             "api-key": self._api_key,
             "format": "json",
             "filters[commodity]": crop_en,
@@ -63,7 +63,8 @@ class MandiService:
         except requests.Timeout as e:
             raise MandiException("Agmarknet API timeout") from e
         except requests.HTTPError as e:
-            raise MandiException(f"Agmarknet API error: {e.response.status_code}") from e
+            status = e.response.status_code if e.response is not None else "unknown"
+            raise MandiException(f"Agmarknet API error: {status}") from e
         except requests.RequestException as e:
             raise MandiException(f"Agmarknet request failed: {e}") from e
 

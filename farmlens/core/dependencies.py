@@ -25,18 +25,14 @@ def get_weather_service(
     return WeatherService(settings)
 
 
-def get_asr_service(
-    settings: Settings = Depends(get_settings),
-) -> ASRService:
+def get_asr_service() -> ASRService:
     """Provide an ASRService instance."""
-    return ASRService(settings)
+    return ASRService()
 
 
-def get_scheme_service(
-    settings: Settings = Depends(get_settings),
-) -> SchemeService:
+def get_scheme_service() -> SchemeService:
     """Provide a SchemeService instance."""
-    return SchemeService(settings)
+    return SchemeService()
 
 
 _rag_pipeline: RAGPipeline | None = None
@@ -52,8 +48,6 @@ def get_rag_pipeline(
     return _rag_pipeline
 
 
-def get_intent_router(
-    settings: Settings = Depends(get_settings),
-) -> IntentRouter:
+def get_intent_router() -> IntentRouter:
     """Provide an IntentRouter instance."""
-    return IntentRouter(settings)
+    return IntentRouter()

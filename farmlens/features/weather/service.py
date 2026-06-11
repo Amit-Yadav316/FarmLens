@@ -37,7 +37,7 @@ class WeatherService:
 
     def _fetch_forecast(self, lat: float, lon: float) -> dict:
         """Fetch raw 5-day forecast from OpenWeatherMap."""
-        params = {
+        params: dict[str, str | float | int] = {
             "lat": lat,
             "lon": lon,
             "appid": self._api_key,
@@ -51,7 +51,8 @@ class WeatherService:
         except requests.Timeout as e:
             raise WeatherException("OpenWeatherMap API timeout") from e
         except requests.HTTPError as e:
-            raise WeatherException(f"OpenWeatherMap API error: {e.response.status_code}") from e
+            status = e.response.status_code if e.response is not None else "unknown"
+            raise WeatherException(f"OpenWeatherMap API error: {status}") from e
         except requests.RequestException as e:
             raise WeatherException(f"OpenWeatherMap request failed: {e}") from e
 
