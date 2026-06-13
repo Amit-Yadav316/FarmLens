@@ -5,9 +5,13 @@ __pycache__/
 *.pth
 *.bin
 *.safetensors
-data/chroma_db/
 /chroma_db/
 models/
+
+# Ship the prebuilt ChromaDB knowledge base for deploy (tracked via git-LFS).
+# Negations override the *.bin rule above so Chroma's index files are included.
+!data/chroma_db/
+!data/chroma_db/**
 
 # ICAR PDF corpus — large binaries, ingested locally (keep dir via .gitkeep)
 data/pdfs/*.pdf
