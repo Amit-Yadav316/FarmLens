@@ -1,8 +1,5 @@
 ---
 title: FarmLens
-emoji: 🌾
-colorFrom: green
-colorTo: yellow
 sdk: docker
 app_port: 7860
 pinned: false
@@ -40,18 +37,18 @@ FarmLens separates **facts** from **language**:
 
 ## Phase 1 — what's built
 
-| Capability | How |
-|---|---|
-| Hindi Q&A grounded in ICAR docs | RAG: ChromaDB + multilingual embeddings + a Hindi prompt |
-| Natural Hindi tone | Airavata (Llama-2-7B, Hindi-first) fine-tuned on KCC Q&A (Unsloth + QLoRA) to GGUF |
-| Live mandi prices | Agmarknet (data.gov.in) API |
-| Weather and spray advisory | OpenWeatherMap + spray-safety rules |
-| Government schemes | Keyword relevance over a curated scheme list |
-| Voice input | Whisper ASR (`/voice-chat`) |
-| Intent routing | Keyword classifier (price / weather / disease / scheme / general) |
-| Swappable LLM backend | Ollama (local, fast) or llama.cpp (CPU, for Spaces) |
-| Two UIs | Gradio (this Space) and Streamlit (local) |
-| Quality | 61 tests, `ruff` + `mypy` clean, strict service-class architecture |
+| Capability | What it does | Powered by |
+|---|---|---|
+| Hindi Q&A from ICAR docs | Answers crop questions grounded in official documents | RAG — ChromaDB + multilingual embeddings + Hindi prompt |
+| Natural Hindi tone | Reads like a real advisor, not a machine translation | Fine-tuned Airavata (Unsloth + QLoRA, exported to GGUF) |
+| Live mandi prices | Latest market rates by crop and state | Agmarknet (data.gov.in) API |
+| Weather and spray advisory | Forecast plus whether it is safe to spray today | OpenWeatherMap + spray-safety rules |
+| Government schemes | Surfaces schemes relevant to a query | Curated list + keyword ranking |
+| Voice input | Lets a farmer ask by speaking | Whisper ASR (`/voice-chat`) |
+| Intent routing | Sends each question to the right handler | Keyword classifier |
+| Swappable LLM backend | Runs fast locally, or self-contained on CPU | Ollama or llama.cpp |
+| Two UIs | Public web demo and a local app | Gradio and Streamlit |
+| Quality | Tested, typed, strict architecture | 61 tests, `ruff` + `mypy` clean |
 
 ### How a question flows
 
