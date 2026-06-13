@@ -18,28 +18,36 @@ def _ensure_ready(pipeline: RAGPipeline) -> None:
 
 
 @router.post("/chat", response_model=RAGResponse)
-async def chat(
+def chat(
     question: str,
     language: str = "hi",
     pipeline: RAGPipeline = Depends(get_rag_pipeline),
     intent_router: IntentRouter = Depends(get_intent_router),
 ) -> RAGResponse:
-    """Classify a text farming question and answer it via RAG."""
+    """Classify a text farming question and answer it via RAG.
+
+    Sync (not async): RAG/Ollama calls are blocking, so FastAPI runs this in a
+    threadpool instead of blocking the event loop.
+    """
     intent_router.classify(question)
     _ensure_ready(pipeline)
     return pipeline.answer(question, language)
 
 
 @router.post("/voice-chat", response_model=RAGResponse)
-async def voice_chat(
+def voice_chat(
     audio: UploadFile,
     language: str = "hi",
     asr: ASRService = Depends(get_asr_service),
     pipeline: RAGPipeline = Depends(get_rag_pipeline),
     intent_router: IntentRouter = Depends(get_intent_router),
 ) -> RAGResponse:
-    """Transcribe audio, classify the question, and answer it via RAG."""
-    audio_bytes = await audio.read()
+    """Transcribe audio, classify the question, and answer it via RAG.
+
+    Sync (not async): Whisper + RAG calls are blocking, so FastAPI threadpools
+    this. Reads the upload synchronously via ``audio.file``.
+    """
+    audio_bytes = audio.file.read()
     transcript = asr.transcribe(audio_bytes, language)
     intent_router.classify(transcript.text)
     _ensure_ready(pipeline)

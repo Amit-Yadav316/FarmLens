@@ -17,8 +17,10 @@ from farmlens.features.weather.service import WeatherService
 router = APIRouter()
 
 
+# Sync (not async): these call blocking external APIs (requests), so FastAPI
+# runs them in a threadpool rather than blocking the event loop.
 @router.get("/price", response_model=PriceResponse)
-async def get_price(
+def get_price(
     crop: str,
     state: str,
     service: MandiService = Depends(get_mandi_service),
@@ -28,7 +30,7 @@ async def get_price(
 
 
 @router.get("/weather", response_model=WeatherResponse)
-async def get_weather(
+def get_weather(
     lat: float,
     lon: float,
     service: WeatherService = Depends(get_weather_service),
@@ -38,7 +40,7 @@ async def get_weather(
 
 
 @router.get("/schemes", response_model=SchemeResponse)
-async def get_schemes(
+def get_schemes(
     query: str,
     service: SchemeService = Depends(get_scheme_service),
 ) -> SchemeResponse:
