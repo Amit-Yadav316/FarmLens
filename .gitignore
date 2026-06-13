@@ -7,6 +7,8 @@ __pycache__/
 *.safetensors
 /chroma_db/
 models/
+# hf CLI skills central install cache
+.agents/
 
 # Ship the prebuilt ChromaDB knowledge base for deploy (tracked via git-LFS).
 # Negations override the *.bin rule above so Chroma's index files are included.
