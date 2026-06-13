@@ -1,10 +1,3 @@
----
-title    :               FarmLens
-sdk      :               docker
-app_port :               7860
-pinned   :               false
----
-
 # FarmLens 
 
 **A multilingual, voice-first AI advisory for Indian farmers.** Ask about crop
@@ -117,7 +110,7 @@ Copy `.env.example` to `.env` and set `LLM_BACKEND=ollama`,
 
 ## Deploy on HuggingFace Spaces (Docker)
 
-This repo is Space-ready (Docker SDK, port 7860, GGUF pulled from HF Hub at
+This repo is Space-ready (Docker SDK, port 7860, pinned = False, GGUF pulled from HF Hub at
 runtime). Set the following under **Settings, Variables and secrets**:
 
 | Name | Kind | Value |
