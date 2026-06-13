@@ -9,6 +9,18 @@ from farmlens.features.rag.schemas import RAGResponse, SourceDocument
 
 _EMBED_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
+# Hindi RAG prompt. The fine-tuned Ollama model wraps this in its own
+# "### सवाल: / ### उत्तर:" template, so this supplies only the instruction +
+# retrieved context + question, in Hindi, to match what the model was trained on.
+_RAG_PROMPT = (
+    "आप एक अनुभवी कृषि सलाहकार हैं। नीचे दी गई जानकारी के आधार पर किसान के "
+    "प्रश्न का उत्तर सरल और स्पष्ट हिंदी में दें। केवल दी गई जानकारी का उपयोग करें; "
+    "यदि उत्तर जानकारी में मौजूद नहीं है, तो विनम्रता से कहें कि आपके पास इसकी "
+    "जानकारी नहीं है।\n\n"
+    "संदर्भ:\n{context}\n\n"
+    "प्रश्न: {question}"
+)
+
 
 class RAGPipeline:
     """Class-based RAG pipeline. Single instance per app."""
@@ -72,6 +84,7 @@ class RAGPipeline:
             from langchain_classic.chains import RetrievalQA
         except ImportError:  # langchain < 1.0
             from langchain.chains import RetrievalQA  # type: ignore[no-redef,import-not-found]
+        from langchain_core.prompts import PromptTemplate
         from langchain_ollama import OllamaLLM
 
         llm = OllamaLLM(
@@ -79,10 +92,12 @@ class RAGPipeline:
             model=self._settings.ollama_model,
         )
         retriever = self._db.as_retriever(search_kwargs={"k": 3})
+        prompt = PromptTemplate(template=_RAG_PROMPT, input_variables=["context", "question"])
         return RetrievalQA.from_chain_type(
             llm=llm,
             retriever=retriever,
             return_source_documents=True,
+            chain_type_kwargs={"prompt": prompt},
         )
 
     def _build_response(self, result: dict, language: str) -> RAGResponse:
