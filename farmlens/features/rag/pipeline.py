@@ -79,25 +79,51 @@ class RAGPipeline:
         )
 
     def _build_chain(self) -> Any:
-        """Build a RetrievalQA chain backed by Ollama and ChromaDB."""
+        """Build a RetrievalQA chain backed by the configured LLM and ChromaDB."""
         try:  # langchain >= 1.0 moved legacy chains into langchain_classic
             from langchain_classic.chains import RetrievalQA
         except ImportError:  # langchain < 1.0
             from langchain.chains import RetrievalQA  # type: ignore[no-redef,import-not-found]
         from langchain_core.prompts import PromptTemplate
-        from langchain_ollama import OllamaLLM
 
-        llm = OllamaLLM(
-            base_url=self._settings.ollama_base_url,
-            model=self._settings.ollama_model,
-        )
         retriever = self._db.as_retriever(search_kwargs={"k": 3})
         prompt = PromptTemplate(template=_RAG_PROMPT, input_variables=["context", "question"])
         return RetrievalQA.from_chain_type(
-            llm=llm,
+            llm=self._build_llm(),
             retriever=retriever,
             return_source_documents=True,
             chain_type_kwargs={"prompt": prompt},
+        )
+
+    def _build_llm(self) -> Any:
+        """Build the LLM backend: Ollama for local dev, llama.cpp for Spaces."""
+        if self._settings.llm_backend == "llamacpp":
+            from langchain_community.llms import LlamaCpp
+
+            return LlamaCpp(
+                model_path=self._resolve_gguf_path(),
+                n_ctx=2048,
+                max_tokens=self._settings.llm_max_tokens,
+                temperature=0.7,
+                verbose=False,
+            )
+        from langchain_ollama import OllamaLLM
+
+        return OllamaLLM(
+            base_url=self._settings.ollama_base_url,
+            model=self._settings.ollama_model,
+        )
+
+    def _resolve_gguf_path(self) -> str:
+        """Return a local GGUF path, pulling from HF Hub when no path is set."""
+        if self._settings.gguf_path:
+            return self._settings.gguf_path
+        from huggingface_hub import hf_hub_download
+
+        return hf_hub_download(
+            repo_id=self._settings.gguf_repo_id,
+            filename=self._settings.gguf_filename,
+            token=self._settings.hf_token or None,
         )
 
     def _build_response(self, result: dict, language: str) -> RAGResponse:

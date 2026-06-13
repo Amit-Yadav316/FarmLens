@@ -21,9 +21,19 @@ class Settings(BaseSettings):
     openweather_api_key: str = ""
     hf_token: str = ""
 
-    # Ollama
+    # LLM backend: "ollama" (local dev) or "llamacpp" (CPU GGUF, e.g. HF Spaces)
+    llm_backend: str = "ollama"
+    llm_max_tokens: int = 512
+
+    # Ollama (used when llm_backend == "ollama")
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "mistral"
+
+    # llama.cpp GGUF (used when llm_backend == "llamacpp")
+    # Local path takes precedence; otherwise the model is pulled from HF Hub.
+    gguf_path: str = ""
+    gguf_repo_id: str = ""
+    gguf_filename: str = "Airavata.Q4_K_M.gguf"
 
     # Storage
     chroma_db_path: str = "./data/chroma_db"

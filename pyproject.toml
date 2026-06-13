@@ -43,6 +43,11 @@ dependencies = [
     "langchain-chroma>=1.1.0",
 ]
 
+[project.optional-dependencies]
+# Deployment-only: CPU GGUF inference for HF Spaces (no Ollama there).
+# Kept optional so local dev (Ollama) doesn't build llama-cpp-python on Windows.
+spaces = ["llama-cpp-python>=0.3"]
+
 [tool.uv]
 link-mode = "copy"
 
