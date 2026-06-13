@@ -8,7 +8,7 @@ app_port: 7860
 pinned: false
 ---
 
-# FarmLens — किसान सहायक
+# FarmLens 
 
 **A multilingual, voice-first AI advisory for Indian farmers.** Ask about crop
 practices, mandi prices, weather, and government schemes — and get a clear answer
