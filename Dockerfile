@@ -17,13 +17,21 @@ ENV HOME=/home/user \
     HF_HOME=/home/user/.cache/huggingface
 WORKDIR /home/user/app
 
-# Dependencies first for better layer caching. --extra spaces adds llama-cpp-python.
+# Project deps first (better layer caching). NOTE: llama-cpp-python is installed
+# separately below as a prebuilt CPU wheel — compiling it from source OOMs the
+# Spaces build runner (exit 137).
 COPY --chown=user pyproject.toml uv.lock ./
 COPY --chown=user farmlens ./farmlens
-RUN uv sync --extra spaces --no-dev --frozen
+RUN uv sync --no-dev --frozen
+
+# Prebuilt CPU wheel for llama-cpp-python (no compilation → no OOM, faster build).
+RUN uv pip install llama-cpp-python --only-binary llama-cpp-python \
+        --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
 
 # Prebuilt ChromaDB knowledge base (config default path: ./data/chroma_db).
 COPY --chown=user data/chroma_db ./data/chroma_db
 
 EXPOSE 7860
-CMD ["uv", "run", "python", "-m", "farmlens.frontend.gradio_app"]
+# Run the venv's Python directly — `uv run` would re-sync and drop the
+# separately-installed llama-cpp-python wheel.
+CMD ["/home/user/app/.venv/bin/python", "-m", "farmlens.frontend.gradio_app"]
