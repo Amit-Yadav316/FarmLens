@@ -104,7 +104,7 @@ class RAGPipeline:
                 model_path=self._resolve_gguf_path(),
                 n_ctx=2048,
                 max_tokens=self._settings.llm_max_tokens,
-                temperature=0.7,
+                temperature=0.4,
                 verbose=False,
             )
         from langchain_ollama import OllamaLLM
